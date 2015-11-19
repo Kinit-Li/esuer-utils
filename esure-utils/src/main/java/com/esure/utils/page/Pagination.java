@@ -2,6 +2,10 @@ package com.esure.utils.page;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import com.esure.utils.json.JSONUtil;
+
 /**
  * 分页逻辑类
  * @description Pagination
@@ -11,6 +15,8 @@ import java.util.List;
  * @param <T>
  */
 public class Pagination<T> {
+	
+	Logger logger = Logger.getLogger(JSONUtil.class);
 	
 	public Pagination() {
 		super();
