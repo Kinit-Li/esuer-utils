@@ -1,12 +1,18 @@
-package com.esure.utils.json;
+package com.esure.utils.jackson;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 /**
  * JSON工具类，是通过封装jackson得到，为的是更简单的使用jackson
@@ -92,6 +98,30 @@ public class JSONUtil {
 	}
 
 	/**
+	 * 将json转换为List
+	 * @description getList
+	 * @author ligy
+	 * @date 2015年11月19日 下午9:57:07
+	 * @param json
+	 * @param elementClass
+	 * @return
+	 */
+	public static <T> List<T> getList(String json, Class<?> elementClass) {
+		logback.debug(JSONUtil.class.getName() + ".jackson2List");
+		ObjectMapper objectMapper = new ObjectMapper();
+		CollectionType type = TypeFactory.defaultInstance()
+				.constructCollectionType(ArrayList.class, elementClass);
+		List<T> list = null;
+		try {
+			list = objectMapper.readValue(json, type);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("json数据转化为对象时出错，可能是对象类型不匹配");
+		}
+		return list;
+	}
+
+	/**
 	 * 将json串转换为Map
 	 * 
 	 * @description json2Map
@@ -118,6 +148,52 @@ public class JSONUtil {
 			throw new RuntimeException("json数据转化为对象时出错，可能是对象类型不匹配");
 		}
 		return map;
+	}
+
+	/**
+	 * 将json转换为Map
+	 * @description getMap
+	 * @author ligy
+	 * @date 2015年11月19日 下午9:55:38
+	 * @param json
+	 * @param keyClass 只能为jdk中有的简单类型
+	 * @param valueClass value类型可以是复杂类型
+	 * @return
+	 */
+	public static <K, V> Map<K, V> getMap(String json, Class<?> keyClass,
+			Class<?> valueClass) {
+		logback.debug(JSONUtil.class.getName() + ".jackson2List");
+		ObjectMapper objectMapper = new ObjectMapper();
+		MapType type = TypeFactory.defaultInstance().constructMapType(
+				HashMap.class, keyClass, valueClass);
+		Map<K, V> map = null;
+		try {
+			map = objectMapper.readValue(json, type);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("json数据转化为对象时出错，可能是对象类型不匹配");
+		}
+		return map;
+	}
+
+	/**
+	 * 对象转化为Json但是字段为Null时该字段不转化
+	 * 
+	 * @description objectNonNull2Json
+	 * @author ligy
+	 * @date 2015年11月19日 下午7:18:28
+	 * @param t
+	 * @return
+	 */
+	public static <T> String objectNonNull2Json(T t) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setSerializationInclusion(Include.NON_NULL);
+		try {
+			return objectMapper.writeValueAsString(t);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("对象转化为json数据出错，可能是对象类型不匹配");
+		}
 	}
 
 }

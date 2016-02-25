@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<configuration>
+	<!-- 将日志打到文件中 -->
+	<appender name="FILELOG" class="ch.qos.logback.core.FileAppender">
+		<file>logfile.log</file>
+		<append>true</append>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 将日志打到控制台 -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{30} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 将日志保存到文件中，保持30天的日志 -->
+	<appender name="FILEROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 日志输出级别 -->
+	<root level="INFO">
+		<!-- <appender-ref ref="FILELOG" /> -->
+		<!-- <appender-ref ref="FILEROLLING" /> -->
+		<appender-ref ref="CONSOLE" />
+	</root>
+</configuration>

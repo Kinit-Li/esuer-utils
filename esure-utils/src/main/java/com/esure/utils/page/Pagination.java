@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.esure.utils.json.JSONUtil;
+import com.esure.utils.jackson.JSONUtil;
 
 /**
  * 分页逻辑类

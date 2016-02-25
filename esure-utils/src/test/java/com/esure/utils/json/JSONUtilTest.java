@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.esure.utils.jackson.JSONUtil;
 import com.esure.utils.json.model.Person;
 
 public class JSONUtilTest {
@@ -55,7 +56,7 @@ public class JSONUtilTest {
 		System.out.println("px : " + JSONUtil.object2Json(px));
 	}
 
-	@Test
+	/*@Test
 	public void testJackson2Map() {
 		Map<Person, Person> map = new HashMap<Person, Person>();
 		Person p = new Person();
@@ -74,6 +75,68 @@ public class JSONUtilTest {
 		Person p2 = map1.get(p);
 		
 		System.out.println("p2 : " + JSONUtil.object2Json(p2));
+	}*/
+	
+	@Test
+	public void testObjectNull2Json() {
+		Map<String, Person> map = new HashMap<String, Person>();
+		Person p = new Person();
+		p.setId(1);
+		map.put("1", p);
+		Person p1 = new Person();
+		p1.setName("小马2");
+		map.put("2", p1);
+		
+		String jsonString = JSONUtil.objectNonNull2Json(map);
+		System.out.println("jsonString : " + jsonString);
 	}
-
+	
+	@Test
+	public void testGetList() {
+		List<Person> ps = new ArrayList<Person>();
+		Person p = new Person();
+		p.setId(1);
+		p.setName("小马");
+		ps.add(p);
+		
+		String jsonString = JSONUtil.object2Json(ps);
+		System.out.println("jsonString : " + jsonString);
+		List<Person> ps1 = JSONUtil.getList(jsonString, Person.class);
+		
+		System.out.println("ps1 : " + JSONUtil.object2Json(ps1));
+		
+		Person px = ps1.get(0);
+		System.out.println("px : " + JSONUtil.object2Json(px));
+	}
+	
+	@Test
+	public void testGetMap() {
+		Map<String, Person> map = new HashMap<String, Person>();
+		Person p = new Person();
+		p.setId(1);
+		p.setName("小马");
+		map.put("2", p);
+		Person p1 = new Person();
+		p1.setId(2);
+		p1.setName("小马2");
+		map.put("1", p1);
+		
+		String jsonString = JSONUtil.object2Json(map);
+		System.out.println("jsonString : " + jsonString);
+		
+		Map<String, Person> map1 = JSONUtil.getMap(jsonString, String.class, Person.class);
+		
+		Person p2 = map1.get("1");
+		
+		System.out.println("p2 : " + JSONUtil.object2Json(p2));
+		
+	}
+	
+	@Test
+	public void testNullValue() {
+		Person p = new Person();
+		p.setName("");
+		System.out.println(JSONUtil.object2Json(p));
+	}
+	
 }
